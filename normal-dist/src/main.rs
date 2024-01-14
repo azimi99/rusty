@@ -1,5 +1,6 @@
 use std::f32::consts::{E, PI};
 use plotters::prelude::*;
+use rayon::range_inclusive;
 
 fn normal_dist(x: f32, mu: f32, sigma: f32) -> f32 {
     let y = 1.0 / (sigma * (2.0 * PI).sqrt()) * 
@@ -7,10 +8,10 @@ fn normal_dist(x: f32, mu: f32, sigma: f32) -> f32 {
     y
 }
 fn main() {
-    let plot_range: Vec<i32> = (-50..=49).collect();
-    let mut normal_vals = [0.0; 100];
+    let plot_range: Vec<f32> = (-5000..=5000).map(|x| x as f32 / 100.0).collect();
+    let mut normal_vals = [0.0; 10001];
     plot_range.iter().enumerate().for_each(|(i, x)| {
-        normal_vals[i] = normal_dist(*x as f32, 0_f32, 1.0);
+        normal_vals[i] = normal_dist(*x as f32, 0_f32, 3.0);
     });
     let root = BitMapBackend::new("plot.png", (640, 480)).into_drawing_area();
     let _ = root.fill(&WHITE);
